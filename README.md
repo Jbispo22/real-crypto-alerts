@@ -3,7 +3,7 @@
 **Monitoramento inteligente de criptomoedas com alertas sonoros em tempo real**
 
 ![Version](https://img.shields.io/badge/version-1.0.5-blue)
-![License]([https://img.shields.io/badge/license-Proprietary-red](https://github.com/Jbispo22/real-crypto-alert/blob/main/LICENSE)
+![License](https://img.shields.io/badge/license-Proprietary-red)
 ![Platform](https://img.shields.io/badge/platform-Android-green)
 
 ## 📱 Sobre o Aplicativo
