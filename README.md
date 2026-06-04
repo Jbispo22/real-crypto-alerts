@@ -2,7 +2,7 @@
 
 **Monitoramento inteligente de criptomoedas com alertas sonoros em tempo real**
 
-[![Version](https://img.shields.io/badge/version-1.0.5-blue?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/releases/latest)
+[![Version](https://img.shields.io/badge/version-1.0.4win-1.1.2apk-blue?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/releases/latest)
 [![License](https://img.shields.io/badge/license-Proprietary-red?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/blob/main/LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Android-green?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/releases)
 [![Downloads](https://img.shields.io/github/downloads/Jbispo22/real-crypto-alert/total?style=for-the-badge&color=orange)](https://github.com/Jbispo22/real-crypto-alert/releases)
