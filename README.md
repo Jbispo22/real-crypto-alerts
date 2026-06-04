@@ -3,9 +3,8 @@
 **Monitoramento inteligente de criptomoedas com alertas sonoros em tempo real**
 
 [![Version](https://img.shields.io/github/v/release/Jbispo22/real-crypto-alert?style=for-the-badge&color=blue)](https://github.com/Jbispo22/real-crypto-alert/releases/latest)
-[![License](https://img.shields.io/badge/license-Proprietary-red?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/blob/main/LICENSE)
+[![Downloads](https://img.shields.io/github/downloads/Jbispo22/real-crypto-alert/total?style=for-the-badge&color=orange&label=Downloads)](https://github.com/Jbispo22/real-crypto-alert/releases)
 [![Platform](https://img.shields.io/badge/platform-Android-green?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/releases)
-[![Downloads](https://img.shields.io/github/downloads/Jbispo22/real-crypto-alert/total?style=for-the-badge&color=orange)](https://github.com/Jbispo22/real-crypto-alert/releases)
 [![Stars](https://img.shields.io/github/stars/Jbispo22/real-crypto-alert?style=for-the-badge&color=yellow)](https://github.com/Jbispo22/real-crypto-alert/stargazers)
 
 ## 📱 Sobre o Aplicativo
