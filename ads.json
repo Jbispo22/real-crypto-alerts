@@ -1,169 +1,22 @@
 [
-  {
-    "label": "OFERTA ML",
-    "title": "Samsung Galaxy S25 5G 256GB",
-    "body": "12GB RAM, Câmera Tripla, Azul",
-    "price": "R$ 3.826,80",
-    "oldPrice": "R$ 5.999,00",
-    "url": "https://meli.la/2xeSDtT"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "Kit 700 Figurinhas Copa 2026",
-    "body": "100 envelopes - Álbum completo",
-    "price": "R$ 679,00",
-    "oldPrice": "R$ 1.000,00",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "Notebook Asus Vivobook 15",
-    "body": "Ryzen 7, 8GB RAM, 512GB SSD",
-    "price": "R$ 2.847,11",
-    "oldPrice": "R$ 3.499,00",
-    "url": "https://meli.la/2qyDytg"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "Samsung Galaxy A17 256GB",
-    "body": "8GB RAM, Câmera 50MP, NFC",
-    "price": "R$ 1.077,30",
-    "oldPrice": "R$ 1.799,00",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "JBL Boombox 4 210W",
-    "body": "Bluetooth portátil, 34h bateria",
-    "price": "R$ 2.424,00",
-    "oldPrice": "R$ 3.421,00",
-    "url": "https://meli.la/1ZMTHVS"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "Impressora 3D Creality Combo",
-    "body": "Sistema multicolor completo",
-    "price": "R$ 4.999,99",
-    "oldPrice": "R$ 5.999,00",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "iPhone 15 256GB Preto",
-    "body": "Loja Oficial Apple, Nota Fiscal",
-    "price": "R$ 4.535,10",
-    "oldPrice": "R$ 8.095,50",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "PC Completo Efacini i7",
-    "body": "16GB RAM, Monitor 23.8\", 512GB",
-    "price": "R$ 2.148,00",
-    "oldPrice": "R$ 3.489,90",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "Impressora Brother Tank Wifi",
-    "body": "Multifuncional, Bivolt, Tanque",
-    "price": "R$ 1.099,00",
-    "oldPrice": "R$ 1.221,11",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "Smart TV Philco 50\" 4K",
-    "body": "Roku, Dolby Audio, HDR10, Wi-Fi",
-    "price": "R$ 1.994,05",
-    "oldPrice": "R$ 3.499,00",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "PS5 Slim Digital 825GB",
-    "body": "Edição Digital, Console novo",
-    "price": "R$ 3.554,10",
-    "oldPrice": "R$ 4.599,00",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "Jogo 007 First Light",
-    "body": "Deluxe Edition + Brinde exclusivo",
-    "price": "R$ 59,00",
-    "oldPrice": "R$ 79,90",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "Lego Batman PS5 Deluxe",
-    "body": "Edição Cavaleiro das Trevas",
-    "price": "R$ 388,00",
-    "oldPrice": "R$ 499,00",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "Directive 8020 Xbox X",
-    "body": "Deluxe Edition, Jogo novo",
-    "price": "R$ 414,14",
-    "oldPrice": "R$ 517,72",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "iPhone 16e 128GB Preto",
-    "body": "Novo, +500 vendidos, Garantia",
-    "price": "R$ 4.493,00",
-    "oldPrice": "R$ 5.499,00",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "Xbox Series X 1TB 4K",
-    "body": "120Hz, SSD, Console novo",
-    "price": "R$ 5.999,50",
-    "oldPrice": "R$ 6.999,00",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  [
-  {
-    "label": "OFERTA ML",
-    "title": "Nintendo Switch 2 Console",
-    "body": "Nova geração, 4.9★ (2032 opiniões)",
-    "price": "R$ 4.519,00",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "Samsung Galaxy A17 256GB",
-    "body": "8GB RAM, Câmera 50MP, NFC, IA",
-    "price": "R$ 1.077,30",
-    "oldPrice": "R$ 1.799,00",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "PS4 Slim 1TB + 2 Controles",
-    "body": "Acompanha 3 jogos, Console novo",
-    "price": "R$ 2.689,00",
-    "url": "https://meli.la/2FS7j6R"
-  },
-  {
-    "label": "OFERTA ML",
-    "title": "Notebook Asus Tuf Gaming",
-    "body": "RTX 3050, Ryzen 7, 16GB, 512GB",
-    "price": "R$ 5.018,71",
-    "oldPrice": "R$ 6.499,00",
-    "url": "https://meli.la/2FS7j6R"
-  },
-    {
-    "label": "OFERTA ML",
-    "title": "iPhone 17 Pro Max 512GB Prateado",
-    "body": "Última unidade! Apple, 512GB",
-    "price": "R$ 11.675,60",
-    "oldPrice": "R$ 13.736,00",
-    "url": "https://meli.la/2FS7j6R"
-  }
+  { "label": "OFERTA ML", "title": "Samsung Galaxy S25 5G 256GB", "body": "12GB RAM, Câmera Tripla, Azul", "price": "R$ 3.826,80", "oldPrice": "R$ 5.999,00", "url": "https://meli.la/2xeSDtT" },
+  { "label": "OFERTA ML", "title": "Kit 700 Figurinhas Copa 2026", "body": "100 envelopes - Álbum completo", "price": "R$ 679,00", "oldPrice": "R$ 1.000,00", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "Notebook Asus Vivobook 15", "body": "Ryzen 7, 8GB RAM, 512GB SSD", "price": "R$ 2.847,11", "oldPrice": "R$ 3.499,00", "url": "https://meli.la/2qyDytg" },
+  { "label": "OFERTA ML", "title": "Samsung Galaxy A17 256GB", "body": "8GB RAM, Câmera 50MP, NFC", "price": "R$ 1.077,30", "oldPrice": "R$ 1.799,00", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "JBL Boombox 4 210W", "body": "Bluetooth portátil, 34h bateria", "price": "R$ 2.424,00", "oldPrice": "R$ 3.421,00", "url": "https://meli.la/1ZMTHVS" },
+  { "label": "OFERTA ML", "title": "Impressora 3D Creality Combo", "body": "Sistema multicolor completo", "price": "R$ 4.999,99", "oldPrice": "R$ 5.999,00", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "iPhone 15 256GB Preto", "body": "Loja Oficial Apple, Nota Fiscal", "price": "R$ 4.535,10", "oldPrice": "R$ 8.095,50", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "PC Completo Efacini i7", "body": "16GB RAM, Monitor 23.8\", 512GB", "price": "R$ 2.148,00", "oldPrice": "R$ 3.489,90", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "Impressora Brother Tank Wifi", "body": "Multifuncional, Bivolt, Tanque", "price": "R$ 1.099,00", "oldPrice": "R$ 1.221,11", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "Smart TV Philco 50\" 4K", "body": "Roku, Dolby Audio, HDR10, Wi-Fi", "price": "R$ 1.994,05", "oldPrice": "R$ 3.499,00", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "PS5 Slim Digital 825GB", "body": "Edição Digital, Console novo", "price": "R$ 3.554,10", "oldPrice": "R$ 4.599,00", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "Jogo 007 First Light", "body": "Deluxe Edition + Brinde exclusivo", "price": "R$ 59,00", "oldPrice": "R$ 79,90", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "Lego Batman PS5 Deluxe", "body": "Edição Cavaleiro das Trevas", "price": "R$ 388,00", "oldPrice": "R$ 499,00", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "Directive 8020 Xbox X", "body": "Deluxe Edition, Jogo novo", "price": "R$ 414,14", "oldPrice": "R$ 517,72", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "iPhone 16e 128GB Preto", "body": "Novo, +500 vendidos, Garantia", "price": "R$ 4.493,00", "oldPrice": "R$ 5.499,00", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "Xbox Series X 1TB 4K", "body": "120Hz, SSD, Console novo", "price": "R$ 5.999,50", "oldPrice": "R$ 6.999,00", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "Nintendo Switch 2 Console", "body": "Nova geração, 4.9★ (2032 opiniões)", "price": "R$ 4.519,00", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "PS4 Slim 1TB + 2 Controles", "body": "Acompanha 3 jogos, Console novo", "price": "R$ 2.689,00", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "Notebook Asus Tuf Gaming", "body": "RTX 3050, Ryzen 7, 16GB, 512GB", "price": "R$ 5.018,71", "oldPrice": "R$ 6.499,00", "url": "https://meli.la/2FS7j6R" },
+  { "label": "OFERTA ML", "title": "iPhone 17 Pro Max 512GB Prateado", "body": "Última unidade! Apple, 512GB", "price": "R$ 11.675,60", "oldPrice": "R$ 13.736,00", "url": "https://meli.la/2FS7j6R" }
 ]
