@@ -33,7 +33,7 @@ O **Real Crypto Alert** é o aplicativo definitivo para quem acompanha o mercado
 
 ## 📥 Download
 
-**Última versão: v1.0.5**
+**Última versão: v1.1.2**
 
 👉 [Baixar APK para Android](https://github.com/Jbispo22/real-crypto-alert/releases/latest)
 
