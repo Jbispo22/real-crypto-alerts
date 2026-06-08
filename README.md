@@ -62,7 +62,7 @@ Este software é propriedade exclusiva de Jonathas Bispo e disponibilizado gratu
 
 Protegido pela Lei de Direitos Autorais (Lei 9.610/98) e Lei de Propriedade Industrial (Lei 9.279/96) do Brasil, além de tratados internacionais.
 
-📧 **Licenciamento comercial:** [seu-email@exemplo.com]
+📧 **Licenciamento comercial:** [jonathas_bispo@hotmail.com]
 
 ## 🔗 Links Oficiais
 
