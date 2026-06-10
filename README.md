@@ -79,6 +79,4 @@ Para dúvidas, sugestões ou reportar bugs, abra uma [Issue](https://github.com/
 
 ---
 
-**Desenvolvido com ❤️ para a comunidade cripto brasileira! 🇧🇷**
-
 © 2026 Jonathas Bispo - Todos os direitos reservados.
