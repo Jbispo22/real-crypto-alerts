@@ -1,0 +1,36 @@
+{
+  "name": "real-crypto-alert",
+  "productName": "Real Crypto Alerts",
+  "version": "1.2.8",
+  "type": "module",
+  "description": "Monitor de alertas de preço de criptomoedas v1.2.8",
+  "author": "Jonathas Bispo",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:android": "vite build && npm run android:build",
+    "android:build": "npm run android:prepare && npm run android:compile",
+    "android:prepare": "mkdir -p android && echo 'Android build prepared'",
+    "android:compile": "echo 'Use external build tool (Android Studio, Cordova, or React Native CLI)'",
+    "build:cordova": "cordova build android --release",
+    "clean": "rimraf dist build_final android"
+  },
+  "dependencies": {
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^10.3.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.6.0",
+    "rimraf": "^6.0.1",
+    "vite": "^8.0.12"
+  }
+}
