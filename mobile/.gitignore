@@ -1,0 +1,13 @@
+node_modules/
+.expo/
+dist/
+.env
+.DS_Store
+*.jks
+*.keystore
+*.log
+.gradle/
+.idea/
+build/
+*.apk
+*.aab
