@@ -10,10 +10,15 @@ import {
   Dimensions,
   Alert,
   Animated,
+  Modal,
+  AppState,
 } from 'react-native'
 import { Audio } from 'expo-av'
 import * as Clipboard from 'expo-clipboard'
 import * as Linking from 'expo-linking'
+import * as Notifications from 'expo-notifications'
+import * as Device from 'expo-device'
+import { useKeepAwake } from 'expo-keep-awake'
 
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
@@ -29,11 +34,6 @@ const COINS = [
   { symbol: 'BNB', name: 'BNB', coingeckoId: 'binancecoin' },
 ]
 
-const SOUND_URLS = {
-  high: require('../../dist/sounds/high.mp3'),
-  low: require('../../dist/sounds/low.mp3'),
-}
-
 const ADS_JSON_URL = 'https://raw.githubusercontent.com/Jbispo22/real-crypto-alert/main/ads.json'
 const FALLBACK_ML_ADS = [
   { label: 'OFERTA ML', title: 'Confira as Melhores Ofertas', body: 'Descontos exclusivos!', url: 'https://meli.la/2FS7j6R' }
@@ -48,7 +48,18 @@ const FIXED_MAIN_AD = {
 const SOUND_DURATION_MS = 4000
 const SOUND_PAUSE_MS = 2000
 
+// Configurar notificações para funcionar com tela bloqueada
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+})
+
 function AppMobile() {
+  useKeepAwake() // Mantém a tela ativa
+
   const [selectedCoins, setSelectedCoins] = useState(() => loadLocal('selectedCoins', []))
   const [prices, setPrices] = useState({})
   const [alerts, setAlerts] = useState(() => sanitizeAlerts(loadLocal('alerts', {})))
@@ -61,6 +72,10 @@ function AppMobile() {
   const [currentAd, setCurrentAd] = useState(FALLBACK_ML_ADS[0])
   const [alertingCoins, setAlertingCoins] = useState([])
   const [jumpAnimation] = useState(new Animated.Value(0))
+  const [showNotificationPermission, setShowNotificationPermission] = useState(false)
+  const [notificationStep, setNotificationStep] = useState('initial') // 'initial' | 'confirm' | 'confirmed'
+  const [appState, setAppState] = useState(AppState.currentState)
+  const [notificationsEnabled, setNotificationsEnabled] = useState(() => loadLocal('notificationsEnabled', false))
 
   const volumeRef = useRef(alertVolume)
   const latestPricesRef = useRef({})
@@ -71,6 +86,113 @@ function AppMobile() {
 
   const audioPool = useRef({ high: null, low: null })
   const alertLoops = useRef({})
+
+  // AppState listener para modo deus
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', handleAppStateChange)
+    return () => subscription.remove()
+  }, [notificationsEnabled])
+
+  const handleAppStateChange = async state => {
+    setAppState(state)
+    if (notificationsEnabled && state !== 'active') {
+      // Ativa modo deus quando tela é bloqueada
+      await enableGodMode()
+    }
+  }
+
+  const enableGodMode = async () => {
+    try {
+      // Solicita permissões de acessibilidade se disponível
+      if (Device.platformApiLevel >= 29) {
+        // Para Android 10+
+        Linking.openURL('android-app://com.android.settings/category/android.intent.category.SETTINGS')
+      }
+    } catch (err) {
+      console.warn('Erro ao ativar modo deus:', err)
+    }
+  }
+
+  // Solicitar permissões de notificação na primeira vez
+  useEffect(() => {
+    const checkNotificationPermission = async () => {
+      if (!loadLocal('notificationPermissionAsked', false)) {
+        setShowNotificationPermission(true)
+      }
+    }
+    setTimeout(checkNotificationPermission, 1000)
+  }, [])
+
+  const requestNotificationPermission = async () => {
+    try {
+      if (!Device.isDevice) {
+        alert('Deve ser executado em dispositivo real')
+        return
+      }
+
+      const { status } = await Notifications.getPermissionsAsync()
+      if (status !== 'granted') {
+        const { status: newStatus } = await Notifications.requestPermissionsAsync({
+          ios: {
+            scopes: ['alert', 'sound', 'badge'],
+          },
+        })
+
+        if (newStatus !== 'granted') {
+          setStatus('❌ Permissão de notificação recusada')
+          setShowNotificationPermission(false)
+          saveLocal('notificationPermissionAsked', true)
+          return
+        }
+      }
+
+      setNotificationStep('confirm')
+    } catch (err) {
+      console.error('Erro ao solicitar permissão:', err)
+      setStatus('❌ Erro ao solicitar permissão')
+    }
+  }
+
+  const handleNotificationConfirm = () => {
+    setNotificationsEnabled(true)
+    saveLocal('notificationsEnabled', true)
+    saveLocal('notificationPermissionAsked', true)
+    setNotificationStep('confirmed')
+    setStatus('✅ Notificações ativadas com sucesso!')
+    setShowNotificationPermission(false)
+
+    // Teste de notificação
+    sendTestNotification()
+  }
+
+  const handleNotificationDecline = () => {
+    setNotificationsEnabled(false)
+    saveLocal('notificationsEnabled', false)
+    saveLocal('notificationPermissionAsked', true)
+    setStatus('❌ Notificações desativadas')
+    setShowNotificationPermission(false)
+  }
+
+  const handleNotificationCancel = () => {
+    setNotificationStep('initial')
+  }
+
+  const sendTestNotification = async () => {
+    try {
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: '✅ Notificações Ativas',
+          body: 'Você receberá alertas mesmo com a tela bloqueada',
+          sound: 'default',
+          badge: 1,
+          data: { test: true },
+        },
+        trigger: { seconds: 1 },
+      })
+    } catch (err) {
+      console.error('Erro ao enviar notificação de teste:', err)
+    }
+  }
 
   useEffect(() => {
     usdBrlRef.current = usdBrl
@@ -232,6 +354,7 @@ function AppMobile() {
           startAlertLoop(coin.symbol, 'high')
           newAlerting.push({ symbol: coin.symbol, type: 'high' })
           triggerJumpAnimation()
+          sendAlertNotification(coin.name, currentPrice, 'ALTA', 'high')
         } else {
           stopAlertLoop(coin.symbol, 'high')
         }
@@ -251,6 +374,7 @@ function AppMobile() {
           startAlertLoop(coin.symbol, 'low')
           newAlerting.push({ symbol: coin.symbol, type: 'low' })
           triggerJumpAnimation()
+          sendAlertNotification(coin.name, currentPrice, 'BAIXA', 'low')
         } else {
           stopAlertLoop(coin.symbol, 'low')
         }
@@ -266,6 +390,38 @@ function AppMobile() {
     const iv = setInterval(checkAlertConditions, 1000)
     return () => clearInterval(iv)
   }, [selectedCoins])
+
+  const sendAlertNotification = async (coinName, price, type, alertType) => {
+    if (!notificationsEnabled) return
+
+    try {
+      const priceFormatted = price.toLocaleString(currency === 'BRL' ? 'pt-BR' : 'en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 6,
+      })
+
+      const emoji = alertType === 'high' ? '📈' : '📉'
+      const currencySymbol = currency === 'BRL' ? 'R$' : '$'
+
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: `${emoji} Alerta ${type}`,
+          body: `${coinName} atingiu ${currencySymbol} ${priceFormatted}`,
+          sound: 'default',
+          badge: 1,
+          priority: 'max',
+          data: {
+            coinName,
+            price,
+            type: alertType,
+          },
+        },
+        trigger: { seconds: 1 },
+      })
+    } catch (err) {
+      console.error('Erro ao enviar notificação de alerta:', err)
+    }
+  }
 
   function triggerJumpAnimation() {
     Animated.sequence([
@@ -438,6 +594,66 @@ function AppMobile() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* MODAL PERMISSÃO NOTIFICAÇÕES */}
+      <Modal
+        visible={showNotificationPermission}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => {}}
+      >
+        <View style={styles.modalOverlay}>
+          {notificationStep === 'initial' && (
+            <View style={styles.modalContent}>
+              <Text style={styles.modalIcon}>🔔</Text>
+              <Text style={styles.modalTitle}>Ativar Notificações?</Text>
+              <Text style={styles.modalDescription}>
+                Receba alertas de preço mesmo com a tela bloqueada
+              </Text>
+
+              <View style={styles.modalButtons}>
+                <TouchableOpacity
+                  style={[styles.modalBtn, styles.modalBtnNo]}
+                  onPress={() => handleNotificationDecline()}
+                >
+                  <Text style={styles.modalBtnText}>Não</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.modalBtn, styles.modalBtnYes]}
+                  onPress={requestNotificationPermission}
+                >
+                  <Text style={styles.modalBtnText}>Sim</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+
+          {notificationStep === 'confirm' && (
+            <View style={styles.modalContent}>
+              <Text style={styles.modalIcon}>✅</Text>
+              <Text style={styles.modalTitle}>Tem certeza?</Text>
+              <Text style={styles.modalDescription}>
+                Você receberá notificações com tela bloqueada e vibrações nos alertas. O app funcionará em "modo deus" para processos contínuos.
+              </Text>
+
+              <View style={styles.modalButtons}>
+                <TouchableOpacity
+                  style={[styles.modalBtn, styles.modalBtnBack]}
+                  onPress={handleNotificationCancel}
+                >
+                  <Text style={styles.modalBtnText}>Voltar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.modalBtn, styles.modalBtnConfirm]}
+                  onPress={handleNotificationConfirm}
+                >
+                  <Text style={styles.modalBtnText}>Aceitar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+        </View>
+      </Modal>
+
       {/* VOLUME CONTROL - TOPO MOBILE */}
       <View style={styles.mobileHeader}>
         <Text style={styles.headerTitle}>⚡ Crypto Alerts</Text>
@@ -610,6 +826,74 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#050816',
   },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  modalContent: {
+    backgroundColor: '#1e293b',
+    borderRadius: 16,
+    padding: 24,
+    width: '100%',
+    maxWidth: 320,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#7c3aed',
+  },
+  modalIcon: {
+    fontSize: 48,
+    marginBottom: 16,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '900',
+    color: '#fff',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  modalDescription: {
+    fontSize: 14,
+    color: '#cbd5e1',
+    textAlign: 'center',
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+  modalButtons: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+  },
+  modalBtn: {
+    flex: 1,
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    borderWidth: 2,
+  },
+  modalBtnNo: {
+    backgroundColor: 'rgba(239, 68, 68, 0.15)',
+    borderColor: '#ef4444',
+  },
+  modalBtnYes: {
+    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+    borderColor: '#10b981',
+  },
+  modalBtnBack: {
+    backgroundColor: 'rgba(124, 58, 237, 0.15)',
+    borderColor: '#7c3aed',
+  },
+  modalBtnConfirm: {
+    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+    borderColor: '#10b981',
+  },
+  modalBtnText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+  },
   mobileHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -701,7 +985,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   partnerAd: {
-    backgroundColor: 'linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%)',
+    backgroundColor: '#1e3a8a',
     borderWidth: 2,
     borderColor: '#fbbf24',
     borderRadius: 8,
@@ -769,7 +1053,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   coinBtnActive: {
-    backgroundColor: 'linear-gradient(135deg, #7c3aed, #a78bfa)',
+    backgroundColor: '#7c3aed',
     borderColor: '#a78bfa',
   },
   coinBtnPulseHigh: {
