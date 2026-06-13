@@ -12,6 +12,8 @@ import {
   Animated,
   Modal,
   AppState,
+  FlatList,
+  Switch,
 } from 'react-native'
 import { Audio } from 'expo-av'
 import * as Clipboard from 'expo-clipboard'
@@ -23,7 +25,7 @@ import { useKeepAwake } from 'expo-keep-awake'
 const SCREEN_WIDTH = Dimensions.get('window').width
 const SCREEN_HEIGHT = Dimensions.get('window').height
 
-const COINS = [
+const COINS_AVAILABLE = [
   { symbol: 'BTC', name: 'Bitcoin', coingeckoId: 'bitcoin' },
   { symbol: 'ETH', name: 'Ethereum', coingeckoId: 'ethereum' },
   { symbol: 'SOL', name: 'Solana', coingeckoId: 'solana' },
@@ -32,6 +34,24 @@ const COINS = [
   { symbol: 'XMR', name: 'Monero', coingeckoId: 'monero' },
   { symbol: 'DOGE', name: 'Dogecoin', coingeckoId: 'dogecoin' },
   { symbol: 'BNB', name: 'BNB', coingeckoId: 'binancecoin' },
+  { symbol: 'ADA', name: 'Cardano', coingeckoId: 'cardano' },
+  { symbol: 'DOT', name: 'Polkadot', coingeckoId: 'polkadot' },
+  { symbol: 'AVAX', name: 'Avalanche', coingeckoId: 'avalanche-2' },
+  { symbol: 'LINK', name: 'Chainlink', coingeckoId: 'chainlink' },
+  { symbol: 'LTC', name: 'Litecoin', coingeckoId: 'litecoin' },
+  { symbol: 'MATIC', name: 'Polygon', coingeckoId: 'matic-network' },
+  { symbol: 'UNI', name: 'Uniswap', coingeckoId: 'uniswap' },
+  { symbol: 'XLM', name: 'Stellar', coingeckoId: 'stellar' },
+  { symbol: 'TRX', name: 'TRON', coingeckoId: 'tron' },
+  { symbol: 'ARB', name: 'Arbitrum', coingeckoId: 'arbitrum' },
+  { symbol: 'OP', name: 'Optimism', coingeckoId: 'optimism' },
+  { symbol: 'ATOM', name: 'Cosmos', coingeckoId: 'cosmos' },
+  { symbol: 'NEAR', name: 'Near Protocol', coingeckoId: 'near' },
+  { symbol: 'FIL', name: 'Filecoin', coingeckoId: 'filecoin' },
+  { symbol: 'AAVE', name: 'Aave', coingeckoId: 'aave' },
+  { symbol: 'GRT', name: 'The Graph', coingeckoId: 'the-graph' },
+  { symbol: 'ALGO', name: 'Algorand', coingeckoId: 'algorand' },
+  { symbol: 'SHIB', name: 'Shiba Inu', coingeckoId: 'shiba-inu' },
 ]
 
 const ADS_JSON_URL = 'https://raw.githubusercontent.com/Jbispo22/real-crypto-alert/main/ads.json'
@@ -58,7 +78,7 @@ Notifications.setNotificationHandler({
 })
 
 function AppMobile() {
-  useKeepAwake() // Mantém a tela ativa
+  useKeepAwake()
 
   const [selectedCoins, setSelectedCoins] = useState(() => loadLocal('selectedCoins', []))
   const [prices, setPrices] = useState({})
@@ -73,9 +93,18 @@ function AppMobile() {
   const [alertingCoins, setAlertingCoins] = useState([])
   const [jumpAnimation] = useState(new Animated.Value(0))
   const [showNotificationPermission, setShowNotificationPermission] = useState(false)
-  const [notificationStep, setNotificationStep] = useState('initial') // 'initial' | 'confirm' | 'confirmed'
+  const [notificationStep, setNotificationStep] = useState('initial')
   const [appState, setAppState] = useState(AppState.currentState)
   const [notificationsEnabled, setNotificationsEnabled] = useState(() => loadLocal('notificationsEnabled', false))
+  
+  // Settings
+  const [showSettings, setShowSettings] = useState(false)
+  const [showCoinSelector, setShowCoinSelector] = useState(false)
+  const [searchCoin, setSearchCoin] = useState('')
+  const [soundEnabled, setSoundEnabled] = useState(() => loadLocal('soundEnabled', true))
+  const [vibrationEnabled, setVibrationEnabled] = useState(() => loadLocal('vibrationEnabled', true))
+  const [alertHistory, setAlertHistory] = useState(() => loadLocal('alertHistory', []))
+  const [showAlertHistory, setShowAlertHistory] = useState(false)
 
   const volumeRef = useRef(alertVolume)
   const latestPricesRef = useRef({})
@@ -87,7 +116,6 @@ function AppMobile() {
   const audioPool = useRef({ high: null, low: null })
   const alertLoops = useRef({})
 
-  // AppState listener para modo deus
   useEffect(() => {
     const subscription = AppState.addEventListener('change', handleAppStateChange)
     return () => subscription.remove()
@@ -96,16 +124,13 @@ function AppMobile() {
   const handleAppStateChange = async state => {
     setAppState(state)
     if (notificationsEnabled && state !== 'active') {
-      // Ativa modo deus quando tela é bloqueada
       await enableGodMode()
     }
   }
 
   const enableGodMode = async () => {
     try {
-      // Solicita permissões de acessibilidade se disponível
       if (Device.platformApiLevel >= 29) {
-        // Para Android 10+
         Linking.openURL('android-app://com.android.settings/category/android.intent.category.SETTINGS')
       }
     } catch (err) {
@@ -113,7 +138,6 @@ function AppMobile() {
     }
   }
 
-  // Solicitar permissões de notificação na primeira vez
   useEffect(() => {
     const checkNotificationPermission = async () => {
       if (!loadLocal('notificationPermissionAsked', false)) {
@@ -160,8 +184,6 @@ function AppMobile() {
     setNotificationStep('confirmed')
     setStatus('✅ Notificações ativadas com sucesso!')
     setShowNotificationPermission(false)
-
-    // Teste de notificação
     sendTestNotification()
   }
 
@@ -223,7 +245,14 @@ function AppMobile() {
     saveLocal('alertVolume', alertVolume)
   }, [alertVolume])
 
-  // Init Audio
+  useEffect(() => {
+    saveLocal('soundEnabled', soundEnabled)
+  }, [soundEnabled])
+
+  useEffect(() => {
+    saveLocal('vibrationEnabled', vibrationEnabled)
+  }, [vibrationEnabled])
+
   useEffect(() => {
     async function initAudio() {
       try {
@@ -241,7 +270,6 @@ function AppMobile() {
     initAudio()
   }, [])
 
-  // Load Ads
   useEffect(() => {
     async function loadMlAds() {
       try {
@@ -262,7 +290,6 @@ function AppMobile() {
     return () => clearInterval(iv)
   }, [])
 
-  // Rotate Ads
   useEffect(() => {
     if (mlAds.length > 0) {
       const iv = setInterval(() => {
@@ -275,7 +302,6 @@ function AppMobile() {
     }
   }, [mlAds])
 
-  // Load Dollar Rate
   useEffect(() => {
     async function loadDollar() {
       try {
@@ -291,7 +317,6 @@ function AppMobile() {
     return () => clearInterval(iv)
   }, [])
 
-  // Load Prices
   useEffect(() => {
     async function loadPrices() {
       if (selectedCoins.length === 0) return
@@ -321,7 +346,6 @@ function AppMobile() {
     return () => clearInterval(iv)
   }, [selectedCoins])
 
-  // Check Alerts
   useEffect(() => {
     function checkAlertConditions() {
       const newAlerting = []
@@ -339,7 +363,6 @@ function AppMobile() {
 
         const currentPrice = currencyRef.current === 'BRL' ? usdPrice * usdBrlRef.current : usdPrice
 
-        // Check High Alert
         const highRaw = String(coinAlerts?.high ?? '').trim()
         const highTarget = parseMoneyValue(highRaw, currencyRef.current)
         const shouldHigh =
@@ -354,12 +377,12 @@ function AppMobile() {
           startAlertLoop(coin.symbol, 'high')
           newAlerting.push({ symbol: coin.symbol, type: 'high' })
           triggerJumpAnimation()
+          addAlertToHistory(coin.name, currentPrice, 'ALTA')
           sendAlertNotification(coin.name, currentPrice, 'ALTA', 'high')
         } else {
           stopAlertLoop(coin.symbol, 'high')
         }
 
-        // Check Low Alert
         const lowRaw = String(coinAlerts?.low ?? '').trim()
         const lowTarget = parseMoneyValue(lowRaw, currencyRef.current)
         const shouldLow =
@@ -374,6 +397,7 @@ function AppMobile() {
           startAlertLoop(coin.symbol, 'low')
           newAlerting.push({ symbol: coin.symbol, type: 'low' })
           triggerJumpAnimation()
+          addAlertToHistory(coin.name, currentPrice, 'BAIXA')
           sendAlertNotification(coin.name, currentPrice, 'BAIXA', 'low')
         } else {
           stopAlertLoop(coin.symbol, 'low')
@@ -391,6 +415,18 @@ function AppMobile() {
     return () => clearInterval(iv)
   }, [selectedCoins])
 
+  const addAlertToHistory = (coinName, price, type) => {
+    const newAlert = {
+      id: Date.now(),
+      coinName,
+      price: price.toFixed(2),
+      type,
+      timestamp: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+    }
+    setAlertHistory(prev => [newAlert, ...prev.slice(0, 49)]) // Mantém últimos 50
+    saveLocal('alertHistory', [newAlert, ...loadLocal('alertHistory', []).slice(0, 49)])
+  }
+
   const sendAlertNotification = async (coinName, price, type, alertType) => {
     if (!notificationsEnabled) return
 
@@ -407,7 +443,7 @@ function AppMobile() {
         content: {
           title: `${emoji} Alerta ${type}`,
           body: `${coinName} atingiu ${currencySymbol} ${priceFormatted}`,
-          sound: 'default',
+          sound: soundEnabled ? 'default' : null,
           badge: 1,
           priority: 'max',
           data: {
@@ -468,6 +504,7 @@ function AppMobile() {
   }
 
   function playAlertSound(type) {
+    if (!soundEnabled) return
     try {
       const audio = audioPool.current[type]
       if (audio) {
@@ -592,9 +629,14 @@ function AppMobile() {
     outputRange: [-50, 0],
   })
 
+  const filteredCoins = COINS_AVAILABLE.filter(coin =>
+    coin.name.toLowerCase().includes(searchCoin.toLowerCase()) ||
+    coin.symbol.toLowerCase().includes(searchCoin.toLowerCase())
+  )
+
   return (
     <SafeAreaView style={styles.container}>
-      {/* MODAL PERMISSÃO NOTIFICAÇÕES */}
+      {/* MODAL NOTIFICAÇÕES */}
       <Modal
         visible={showNotificationPermission}
         transparent={true}
@@ -654,25 +696,231 @@ function AppMobile() {
         </View>
       </Modal>
 
-      {/* VOLUME CONTROL - TOPO MOBILE */}
-      <View style={styles.mobileHeader}>
-        <Text style={styles.headerTitle}>⚡ Crypto Alerts</Text>
-        <View style={styles.volumeContainer}>
-          <Text style={styles.volumeLabel}>🔊 {alertVolume}%</Text>
-          <View style={styles.volumeSlider}>
-            <TouchableOpacity
-              style={[styles.volumeButton, alertVolume <= 50 && styles.volumeButtonActive]}
-              onPress={() => setAlertVolume(Math.max(0, alertVolume - 10))}
-            >
-              <Text style={styles.volumeButtonText}>−</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.volumeButton, alertVolume >= 50 && styles.volumeButtonActive]}
-              onPress={() => setAlertVolume(Math.min(100, alertVolume + 10))}
-            >
-              <Text style={styles.volumeButtonText}>+</Text>
+      {/* MODAL SELECIONADOR DE CRYPTOS */}
+      <Modal
+        visible={showCoinSelector}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowCoinSelector(false)}
+      >
+        <SafeAreaView style={styles.coinSelectorContainer}>
+          <View style={styles.coinSelectorHeader}>
+            <Text style={styles.coinSelectorTitle}>Selecionar Criptomoedas</Text>
+            <TouchableOpacity onPress={() => setShowCoinSelector(false)}>
+              <Text style={styles.coinSelectorClose}>✕</Text>
             </TouchableOpacity>
           </View>
+
+          <TextInput
+            style={styles.coinSearchInput}
+            placeholder="Buscar cripto..."
+            placeholderTextColor="#64748b"
+            value={searchCoin}
+            onChangeText={setSearchCoin}
+          />
+
+          <FlatList
+            data={filteredCoins}
+            keyExtractor={item => item.coingeckoId}
+            renderItem={({ item }) => {
+              const k = `${item.symbol}__${item.coingeckoId}`
+              const isSelected = selectedCoins.some(c => `${c.symbol}__${c.coingeckoId}` === k)
+              return (
+                <TouchableOpacity
+                  style={[styles.coinSelectorItem, isSelected && styles.coinSelectorItemSelected]}
+                  onPress={() => toggleCoin(item)}
+                >
+                  <View style={styles.coinSelectorItemContent}>
+                    <Text style={styles.coinSelectorSymbol}>{item.symbol}</Text>
+                    <Text style={styles.coinSelectorName}>{item.name}</Text>
+                  </View>
+                  <View style={[styles.coinSelectorCheckbox, isSelected && styles.coinSelectorCheckboxChecked]}>
+                    {isSelected && <Text style={styles.coinSelectorCheckmark}>✓</Text>}
+                  </View>
+                </TouchableOpacity>
+              )
+            }}
+          />
+        </SafeAreaView>
+      </Modal>
+
+      {/* MODAL HISTÓRICO DE ALERTAS */}
+      <Modal
+        visible={showAlertHistory}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowAlertHistory(false)}
+      >
+        <SafeAreaView style={styles.historyContainer}>
+          <View style={styles.historyHeader}>
+            <Text style={styles.historyTitle}>Histórico de Alertas</Text>
+            <TouchableOpacity onPress={() => setShowAlertHistory(false)}>
+              <Text style={styles.historyClose}>✕</Text>
+            </TouchableOpacity>
+          </View>
+
+          {alertHistory.length === 0 ? (
+            <View style={styles.historyEmpty}>
+              <Text style={styles.historyEmptyText}>Nenhum alerta ainda 📭</Text>
+            </View>
+          ) : (
+            <FlatList
+              data={alertHistory}
+              keyExtractor={item => item.id.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.historyItem}>
+                  <View style={styles.historyItemLeft}>
+                    <Text style={styles.historyItemTime}>{item.timestamp}</Text>
+                    <Text style={styles.historyItemCoin}>{item.coinName}</Text>
+                  </View>
+                  <View style={[styles.historyItemRight, item.type === 'ALTA' ? styles.historyItemHigh : styles.historyItemLow]}>
+                    <Text style={styles.historyItemType}>{item.type}</Text>
+                    <Text style={styles.historyItemPrice}>${item.price}</Text>
+                  </View>
+                </View>
+              )}
+            />
+          )}
+        </SafeAreaView>
+      </Modal>
+
+      {/* MODAL CONFIGURAÇÕES */}
+      <Modal
+        visible={showSettings}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setShowSettings(false)}
+      >
+        <SafeAreaView style={styles.settingsContainer}>
+          <View style={styles.settingsHeader}>
+            <Text style={styles.settingsTitle}>⚙️ Configurações</Text>
+            <TouchableOpacity onPress={() => setShowSettings(false)}>
+              <Text style={styles.settingsClose}>✕</Text>
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView style={styles.settingsContent}>
+            {/* Som */}
+            <View style={styles.settingsSection}>
+              <Text style={styles.settingsSectionTitle}>🔊 Som</Text>
+              <View style={styles.settingsItem}>
+                <Text style={styles.settingsItemLabel}>Som dos Alertas</Text>
+                <Switch
+                  value={soundEnabled}
+                  onValueChange={setSoundEnabled}
+                  trackColor={{ false: '#334155', true: '#10b981' }}
+                  thumbColor={soundEnabled ? '#10b981' : '#64748b'}
+                />
+              </View>
+            </View>
+
+            {/* Vibração */}
+            <View style={styles.settingsSection}>
+              <Text style={styles.settingsSectionTitle}>📳 Vibração</Text>
+              <View style={styles.settingsItem}>
+                <Text style={styles.settingsItemLabel}>Vibração nos Alertas</Text>
+                <Switch
+                  value={vibrationEnabled}
+                  onValueChange={setVibrationEnabled}
+                  trackColor={{ false: '#334155', true: '#10b981' }}
+                  thumbColor={vibrationEnabled ? '#10b981' : '#64748b'}
+                />
+              </View>
+            </View>
+
+            {/* Notificações */}
+            <View style={styles.settingsSection}>
+              <Text style={styles.settingsSectionTitle}>🔔 Notificações</Text>
+              <View style={styles.settingsItem}>
+                <Text style={styles.settingsItemLabel}>Notificações com Tela Bloqueada</Text>
+                <Switch
+                  value={notificationsEnabled}
+                  onValueChange={flag => {
+                    setNotificationsEnabled(flag)
+                    saveLocal('notificationsEnabled', flag)
+                  }}
+                  trackColor={{ false: '#334155', true: '#10b981' }}
+                  thumbColor={notificationsEnabled ? '#10b981' : '#64748b'}
+                />
+              </View>
+            </View>
+
+            {/* Limite de Moedas */}
+            <View style={styles.settingsSection}>
+              <Text style={styles.settingsSectionTitle}>📊 Limite de Moedas</Text>
+              <View style={styles.settingsInfo}>
+                <Text style={styles.settingsInfoText}>
+                  Moedas Monitoradas: {selectedCoins.length} / 8
+                </Text>
+              </View>
+            </View>
+
+            {/* Histórico */}
+            <View style={styles.settingsSection}>
+              <Text style={styles.settingsSectionTitle}>📜 Histórico</Text>
+              <View style={styles.settingsInfo}>
+                <Text style={styles.settingsInfoText}>
+                  Total de Alertas: {alertHistory.length}
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={styles.settingsBtn}
+                onPress={() => {
+                  setShowAlertHistory(true)
+                  setShowSettings(false)
+                }}
+              >
+                <Text style={styles.settingsBtnText}>Ver Histórico</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.settingsBtn, styles.settingsBtnDanger]}
+                onPress={() => {
+                  setAlertHistory([])
+                  saveLocal('alertHistory', [])
+                  setStatus('✅ Histórico limpo')
+                }}
+              >
+                <Text style={styles.settingsBtnText}>Limpar Histórico</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      </Modal>
+
+      {/* HEADER COM VOLUME */}
+      <View style={styles.mobileHeader}>
+        <Text style={styles.headerTitle}>⚡ Crypto Alerts</Text>
+        <View style={styles.headerActions}>
+          <TouchableOpacity
+            style={styles.headerBtn}
+            onPress={() => setShowSettings(true)}
+          >
+            <Text style={styles.headerBtnText}>⚙️</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.headerBtn}
+            onPress={() => setShowCoinSelector(true)}
+          >
+            <Text style={styles.headerBtnText}>+</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={styles.volumeContainer}>
+        <Text style={styles.volumeLabel}>🔊 {alertVolume}%</Text>
+        <View style={styles.volumeSlider}>
+          <TouchableOpacity
+            style={[styles.volumeButton, alertVolume <= 50 && styles.volumeButtonActive]}
+            onPress={() => setAlertVolume(Math.max(0, alertVolume - 10))}
+          >
+            <Text style={styles.volumeButtonText}>−</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.volumeButton, alertVolume >= 50 && styles.volumeButtonActive]}
+            onPress={() => setAlertVolume(Math.min(100, alertVolume + 10))}
+          >
+            <Text style={styles.volumeButtonText}>+</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -722,32 +970,7 @@ function AppMobile() {
           </TouchableOpacity>
         </View>
 
-        {/* COIN PICKER */}
-        <View style={styles.coinPicker}>
-          {COINS.map((coin, index) => {
-            const k = `${coin.symbol}__${coin.coingeckoId}`
-            const isSelected = selectedCoins.some(c => `${c.symbol}__${c.coingeckoId}` === k)
-            const alertState = alertingCoins.find(a => a.symbol === coin.symbol)
-            const isAlerting = !!alertState
-
-            return (
-              <TouchableOpacity
-                key={coin.symbol}
-                style={[
-                  styles.coinBtn,
-                  isSelected && styles.coinBtnActive,
-                  isAlerting && alertState.type === 'high' && styles.coinBtnPulseHigh,
-                  isAlerting && alertState.type === 'low' && styles.coinBtnPulseLow,
-                ]}
-                onPress={() => toggleCoin(coin)}
-              >
-                <Text style={styles.coinBtnText}>{coin.symbol}</Text>
-              </TouchableOpacity>
-            )
-          })}
-        </View>
-
-        {/* CARDS LIST */}
+        {/* SELECTED COINS CARDS */}
         <Animated.View style={[styles.cardsListContainer, { transform: [{ translateY: jumpTranslateY }] }]}>
           {selectedCoins.map(coin => {
             const k = `${coin.symbol}__${coin.coingeckoId}`
@@ -894,6 +1117,255 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#fff',
   },
+  coinSelectorContainer: {
+    flex: 1,
+    backgroundColor: '#050816',
+  },
+  coinSelectorHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#0b0f19',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(124, 58, 237, 0.25)',
+  },
+  coinSelectorTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#fbbf24',
+  },
+  coinSelectorClose: {
+    fontSize: 24,
+    color: '#ef4444',
+    fontWeight: '700',
+  },
+  coinSearchInput: {
+    marginHorizontal: 12,
+    marginVertical: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    backgroundColor: '#1e293b',
+    borderWidth: 1,
+    borderColor: '#334155',
+    borderRadius: 8,
+    color: '#fff',
+    fontSize: 14,
+  },
+  coinSelectorItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: 12,
+    marginVertical: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 14,
+    backgroundColor: '#1e293b',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  coinSelectorItemSelected: {
+    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+    borderColor: '#10b981',
+  },
+  coinSelectorItemContent: {
+    flex: 1,
+  },
+  coinSelectorSymbol: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: '#10b981',
+  },
+  coinSelectorName: {
+    fontSize: 12,
+    color: '#cbd5e1',
+    marginTop: 2,
+  },
+  coinSelectorCheckbox: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: '#334155',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  coinSelectorCheckboxChecked: {
+    borderColor: '#10b981',
+    backgroundColor: '#10b981',
+  },
+  coinSelectorCheckmark: {
+    fontSize: 14,
+    color: '#fff',
+    fontWeight: '800',
+  },
+  historyContainer: {
+    flex: 1,
+    backgroundColor: '#050816',
+  },
+  historyHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#0b0f19',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(124, 58, 237, 0.25)',
+  },
+  historyTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#fbbf24',
+  },
+  historyClose: {
+    fontSize: 24,
+    color: '#ef4444',
+    fontWeight: '700',
+  },
+  historyEmpty: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  historyEmptyText: {
+    fontSize: 16,
+    color: '#64748b',
+  },
+  historyItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginHorizontal: 12,
+    marginVertical: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    backgroundColor: '#1e293b',
+    borderRadius: 8,
+    borderLeftWidth: 4,
+    borderLeftColor: '#7c3aed',
+  },
+  historyItemLeft: {
+    flex: 1,
+  },
+  historyItemTime: {
+    fontSize: 11,
+    color: '#64748b',
+  },
+  historyItemCoin: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+    marginTop: 4,
+  },
+  historyItemRight: {
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  historyItemHigh: {
+    backgroundColor: 'rgba(16, 185, 129, 0.2)',
+  },
+  historyItemLow: {
+    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+  },
+  historyItemType: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: '#fff',
+  },
+  historyItemPrice: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: '#fff',
+    marginTop: 2,
+  },
+  settingsContainer: {
+    flex: 1,
+    backgroundColor: '#050816',
+  },
+  settingsHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#0b0f19',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(124, 58, 237, 0.25)',
+  },
+  settingsTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#fbbf24',
+  },
+  settingsClose: {
+    fontSize: 24,
+    color: '#ef4444',
+    fontWeight: '700',
+  },
+  settingsContent: {
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+  },
+  settingsSection: {
+    marginBottom: 20,
+  },
+  settingsSectionTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: '#7c3aed',
+    marginBottom: 12,
+  },
+  settingsItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    backgroundColor: '#1e293b',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  settingsItemLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#e2e8f0',
+  },
+  settingsInfo: {
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    backgroundColor: '#1e293b',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#334155',
+    marginBottom: 12,
+  },
+  settingsInfoText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#cbd5e1',
+  },
+  settingsBtn: {
+    paddingVertical: 12,
+    backgroundColor: '#7c3aed',
+    borderRadius: 8,
+    alignItems: 'center',
+    marginVertical: 6,
+  },
+  settingsBtnDanger: {
+    backgroundColor: '#ef4444',
+  },
+  settingsBtnText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#fff',
+  },
   mobileHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -909,13 +1381,33 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#fbbf24',
   },
+  headerActions: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  headerBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: 'rgba(124, 58, 237, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(124, 58, 237, 0.5)',
+  },
+  headerBtnText: {
+    fontSize: 18,
+    fontWeight: '700',
+  },
   volumeContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 12,
-    backgroundColor: 'rgba(15, 23, 42, 0.6)',
+    marginHorizontal: 12,
+    marginVertical: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
+    backgroundColor: 'rgba(15, 23, 42, 0.6)',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: 'rgba(51, 65, 85, 0.6)',
@@ -1034,39 +1526,6 @@ const styles = StyleSheet.create({
   pasteBtnText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#fff',
-  },
-  coinPicker: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-    marginBottom: 12,
-    justifyContent: 'space-between',
-  },
-  coinBtn: {
-    width: '22%',
-    paddingVertical: 12,
-    borderRadius: 6,
-    backgroundColor: '#1e293b',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.05)',
-    alignItems: 'center',
-  },
-  coinBtnActive: {
-    backgroundColor: '#7c3aed',
-    borderColor: '#a78bfa',
-  },
-  coinBtnPulseHigh: {
-    borderColor: '#10b981',
-    backgroundColor: 'rgba(16, 185, 129, 0.2)',
-  },
-  coinBtnPulseLow: {
-    borderColor: '#ef4444',
-    backgroundColor: 'rgba(239, 68, 68, 0.2)',
-  },
-  coinBtnText: {
-    fontSize: 11,
-    fontWeight: '800',
     color: '#fff',
   },
   cardsListContainer: {
