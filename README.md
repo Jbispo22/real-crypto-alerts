@@ -6,7 +6,9 @@
 [![Platform](https://img.shields.io/badge/platform-Android%20%7C%20Windows-green?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/releases)
 [![License](https://img.shields.io/badge/license-Proprietary-red?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/blob/main/LICENSE)
 [![Stars](https://img.shields.io/badge/stars-0-yellow?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/stargazers)
-[![Downloads](https://img.shields.io/github/downloads/Jbispo22/real-crypto-alerts/total?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alerts/releases)## 📱 Sobre o Aplicativo
+[![Downloads](https://img.shields.io/github/downloads/Jbispo22/real-crypto-alerts/latest/total?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alerts/releases)
+
+## 📱 Sobre o Aplicativo
 
 O **Real Crypto Alert** é o aplicativo definitivo para quem acompanha o mercado de criptomoedas e não quer perder nenhuma oportunidade de compra ou venda.
 
