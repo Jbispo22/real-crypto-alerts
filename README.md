@@ -6,8 +6,7 @@
 [![Platform](https://img.shields.io/badge/platform-Android%20%7C%20Windows-green?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/releases)
 [![License](https://img.shields.io/badge/license-Proprietary-red?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/blob/main/LICENSE)
 [![Stars](https://img.shields.io/badge/stars-0-yellow?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/stargazers)
-[![Downloads](https://img.shields.io/badge/Downloads-150-orange?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alerts/releases)
-
+[![Downloads](https://badgen.net/github/downloads/Jbispo22/real-crypto-alerts/total?label=Downloads&color=orange)](https://github.com/Jbispo22/real-crypto-alerts/releases)
 
 ## 📱 Sobre o Aplicativo
 
