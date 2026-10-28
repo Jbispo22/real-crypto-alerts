@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jbispo22.github.io/real-crypto-alerts/sitemap.xml
