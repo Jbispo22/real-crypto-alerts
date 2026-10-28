@@ -2,11 +2,11 @@
 
 **Monitoramento inteligente de criptomoedas com alertas sonoros em tempo real**
 
-[![Version](https://img.shields.io/badge/version-2.0%20%7C%201.2.8-blue?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/releases/latest)
-[![Platform](https://img.shields.io/badge/platform-Android%20%7C%20Windows-green?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/releases)
-[![License](https://img.shields.io/badge/license-Proprietary-red?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/blob/main/LICENSE)
-[![Stars](https://img.shields.io/badge/stars-0-yellow?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/stargazers)
-[![Downloads](https://img.shields.io/github/downloads/Jbispo22/real-crypto-alert/total?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alert/releases)
+[![Version](https://img.shields.io/badge/version-2.0.1-blue?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alerts/releases/latest)
+[![Platform](https://img.shields.io/badge/platform-Android%20%7C%20Windows-green?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alerts/releases)
+[![License](https://img.shields.io/badge/license-Proprietary-red?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alerts/blob/main/LICENSE)
+[![Stars](https://img.shields.io/github/stars/Jbispo22/real-crypto-alerts?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alerts/stargazers)
+[![Downloads](https://img.shields.io/github/downloads/Jbispo22/real-crypto-alerts/total?style=for-the-badge)](https://github.com/Jbispo22/real-crypto-alerts/releases)
 
  ## 📱 Sobre o Aplicativo
 
@@ -33,9 +33,9 @@ O **Real Crypto Alert** é o aplicativo definitivo para quem acompanha o mercado
 
 ## 📥 Download
 
-**Última versão: v1.1.2**
+**Última versão: v2.0.1**
 
-👉 [Baixar APK para Android](https://github.com/Jbispo22/real-crypto-alert/releases/latest)
+👉 [Baixar APK para Android](https://github.com/Jbispo22/real-crypto-alerts/releases/latest)
 
 ## 🛡️ Segurança
 
@@ -66,7 +66,7 @@ Protegido pela Lei de Direitos Autorais (Lei 9.610/98) e Lei de Propriedade Indu
 
 ## 🔗 Links Oficiais
 
-- 📱 **Download:** [GitHub Releases](https://github.com/Jbispo22/real-crypto-alert/releases)
+- 📱 **Download:** [GitHub Releases](https://github.com/Jbispo22/real-crypto-alerts/releases)
 - 🤝 **Parceiros:** Mercado Bitcoin, Mercado Livre
 
 ## 📸 Screenshots
@@ -75,7 +75,7 @@ Protegido pela Lei de Direitos Autorais (Lei 9.610/98) e Lei de Propriedade Indu
 
 ## 💬 Suporte
 
-Para dúvidas, sugestões ou reportar bugs, abra uma [Issue](https://github.com/Jbispo22/real-crypto-alert/issues) no GitHub.
+Para dúvidas, sugestões ou reportar bugs, abra uma [Issue](https://github.com/Jbispo22/real-crypto-alerts/issues) no GitHub.
 
 ---
 
