@@ -37,6 +37,8 @@ O **Real Crypto Alert** é o aplicativo definitivo para quem acompanha o mercado
 
 👉 [Baixar APK para Android](https://github.com/Jbispo22/real-crypto-alerts/releases/latest)
 
+🌐 **Página oficial:** [jbispo22.github.io/real-crypto-alerts](https://jbispo22.github.io/real-crypto-alerts/)
+
 ## 🛡️ Segurança
 
 - ✅ **100% Livre de vírus e malware**
@@ -66,6 +68,7 @@ Protegido pela Lei de Direitos Autorais (Lei 9.610/98) e Lei de Propriedade Indu
 
 ## 🔗 Links Oficiais
 
+- 🌐 **Site oficial:** [jbispo22.github.io/real-crypto-alerts](https://jbispo22.github.io/real-crypto-alerts/)
 - 📱 **Download:** [GitHub Releases](https://github.com/Jbispo22/real-crypto-alerts/releases)
 - 🤝 **Parceiros:** Mercado Bitcoin, Mercado Livre
 
