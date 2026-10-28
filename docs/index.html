@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real Crypto Alert — alertas de preço de criptomoedas no Android e no Windows</title>
+<meta name="description" content="App grátis que toca um alerta sonoro quando o Bitcoin ou qualquer uma das 13.000+ criptomoedas atinge o preço que você definir. Android e Windows, sem cadastro.">
+<meta name="keywords" content="alerta de preço criptomoedas, alerta bitcoin, app criptomoedas, alerta sonoro bitcoin, monitorar preço bitcoin">
+<link rel="canonical" href="https://jbispo22.github.io/real-crypto-alerts/">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Real Crypto Alert">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Real Crypto Alert — alertas sonoros de preço para 13.000+ criptomoedas">
+<meta property="og:description" content="Defina o preço-alvo de alta ou baixa e receba um alerta sonoro na hora. Grátis para Android e Windows, sem cadastro.">
+<meta property="og:url" content="https://jbispo22.github.io/real-crypto-alerts/">
+<meta property="og:image" content="https://jbispo22.github.io/real-crypto-alerts/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Real Crypto Alert — alertas de preço de criptomoedas para Android e Windows">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Real Crypto Alert — alertas sonoros de preço para criptomoedas">
+<meta name="twitter:description" content="Defina o preço-alvo e receba um alerta sonoro na hora. Grátis para Android e Windows.">
+<meta name="twitter:image" content="https://jbispo22.github.io/real-crypto-alerts/og.png">
+<meta name="theme-color" content="#0b0e14">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Real Crypto Alert",
+  "url": "https://jbispo22.github.io/real-crypto-alerts/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Android, Windows",
+  "softwareVersion": "2.0.1",
+  "inLanguage": "pt-BR",
+  "description": "Aplicativo gratuito que monitora mais de 13.000 criptomoedas e toca um alerta sonoro quando o preço atinge a meta de alta ou de baixa definida pelo usuário.",
+  "downloadUrl": "https://github.com/Jbispo22/real-crypto-alerts/releases/latest",
+  "license": "https://github.com/Jbispo22/real-crypto-alerts/blob/main/LICENSE",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BRL" },
+  "author": { "@type": "Person", "name": "Jonathas Bispo" }
+}
+</script>
+
+<style>
+  :root {
+    --bg: #0b0e14;
+    --card: #141a24;
+    --line: #222c3a;
+    --text: #e8eef7;
+    --muted: #9aa7b8;
+    --green: #16c784;
+    --amber: #f7b733;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  header.hero { padding: 56px 0 40px; text-align: center; background: radial-gradient(60% 90% at 50% 0%, #16233a 0%, var(--bg) 70%); }
+  h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.15; margin: 0 0 14px; letter-spacing: -0.5px; }
+  h1 span { color: var(--green); }
+  .lead { color: var(--muted); font-size: clamp(16px, 2.2vw, 19px); max-width: 640px; margin: 0 auto 28px; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px; border-radius: 12px; font-weight: 650; text-decoration: none;
+    border: 1px solid var(--line); color: var(--text); background: var(--card);
+    transition: transform .12s ease, border-color .12s ease;
+  }
+  .btn:hover { transform: translateY(-1px); border-color: #36455c; }
+  .btn.primary { background: var(--green); color: #06231a; border-color: var(--green); }
+  .meta { color: var(--muted); font-size: 13px; margin-top: 18px; }
+  section { padding: 44px 0; border-top: 1px solid var(--line); }
+  h2 { font-size: clamp(21px, 3vw, 27px); margin: 0 0 8px; }
+  .sub { color: var(--muted); margin: 0 0 26px; }
+  .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .card h3 { margin: 0 0 6px; font-size: 16px; }
+  .card p { margin: 0; color: var(--muted); font-size: 14.5px; }
+  .ico { font-size: 20px; display: block; margin-bottom: 8px; }
+  ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  ol.steps li { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px 20px 20px 58px; position: relative; color: var(--muted); }
+  ol.steps li strong { display: block; color: var(--text); margin-bottom: 4px; }
+  ol.steps li::before {
+    counter-increment: s; content: counter(s);
+    position: absolute; left: 18px; top: 18px; width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(22,199,132,.15); color: var(--green); font-weight: 700;
+    display: grid; place-items: center; font-size: 14px;
+  }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0; list-style: none; }
+  .tags li { border: 1px solid var(--line); background: var(--card); color: var(--muted); padding: 7px 12px; border-radius: 999px; font-size: 14px; }
+  details { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin-bottom: 10px; }
+  details + details { margin-top: 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  details p { color: var(--muted); margin: 10px 0 0; font-size: 14.5px; }
+  a { color: var(--green); }
+  .note { color: var(--muted); font-size: 13px; }
+  footer { padding: 34px 0 46px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13.5px; }
+  footer p { margin: 4px 0; }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <h1>Seu alerta toca quando o preço <span>chega onde você quer</span></h1>
+    <p class="lead">O Real Crypto Alert acompanha mais de 13.000 criptomoedas e dispara um alarme sonoro no celular ou no PC no instante em que sua meta de alta ou de baixa é atingida.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/Jbispo22/real-crypto-alerts/releases/download/v2.0.1/Real-Crypto-Alerts-2.0.apk">Baixar para Android (APK)</a>
+      <a class="btn" href="https://github.com/Jbispo22/real-crypto-alerts/releases/latest">Baixar para Windows</a>
+    </div>
+    <p class="meta">Versão 2.0.1 · Android · Windows 1.2.8 · grátis · sem cadastro</p>
+  </div>
+</header>
+
+<main>
+<section>
+  <div class="wrap">
+    <h2>O que ele faz</h2>
+    <p class="sub">Simples de configurar, feito para quem não quer ficar olhando gráfico o dia inteiro.</p>
+    <div class="grid">
+      <div class="card"><span class="ico">🎯</span><h3>Alerta de alta e de baixa</h3><p>Defina o preço-alvo para cada moeda e receba o aviso na hora em que ele for atingido.</p></div>
+      <div class="card"><span class="ico">🔊</span><h3>Som que você não perde</h3><p>Alarme sonoro com volume ajustável. Se você digitar um valor já ultrapassado, o app avisa na hora.</p></div>
+      <div class="card"><span class="ico">🌎</span><h3>13.000+ criptomoedas</h3><p>Cotações via CoinGecko, com identificação por ID para não confundir moedas de mesmo símbolo.</p></div>
+      <div class="card"><span class="ico">💱</span><h3>Dólar e real lado a lado</h3><p>Conversão de USD para BRL na tela, sem precisar abrir calculadora.</p></div>
+      <div class="card"><span class="ico">📋</span><h3>Colar o link da exchange</h3><p>Funciona com Mercado Bitcoin, Binance, Coinbase, KuCoin, Gate.io, OKX, Bybit, CoinGecko e CoinMarketCap.</p></div>
+      <div class="card"><span class="ico">🌙</span><h3>Funciona em segundo plano</h3><p>Segue monitorando com a tela bloqueada: o alerta toca mesmo com o celular no bolso.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Como funciona</h2>
+    <p class="sub">Três passos, leva menos de um minuto.</p>
+    <ol class="steps">
+      <li><strong>Escolha a moeda</strong>Cole o link da exchange ou digite o símbolo (BTC, ETH, SOL…).</li>
+      <li><strong>Defina a meta</strong>Informe o preço de alta ou de baixa que você quer acompanhar.</li>
+      <li><strong>Deixe o app trabalhando</strong>Quando o preço chegar lá, o alarme toca.</li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Exchanges e fontes compatíveis</h2>
+    <p class="sub">Ou qualquer outra exchange, colando o link direto da moeda.</p>
+    <ul class="tags">
+      <li>Mercado Bitcoin</li><li>Binance</li><li>Coinbase</li><li>KuCoin</li>
+      <li>Gate.io</li><li>OKX</li><li>Bybit</li><li>CoinGecko</li><li>CoinMarketCap</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Perguntas frequentes</h2>
+    <details><summary>É grátis mesmo?</summary><p>Sim. Não tem assinatura, não tem versão paga e não é preciso criar conta para usar.</p></details>
+    <details><summary>Preciso cadastrar email ou senha?</summary><p>Não. O app não exige login, e as moedas e metas que você cadastra ficam salvas no seu próprio aparelho.</p></details>
+    <details><summary>Funciona com a tela bloqueada?</summary><p>Sim, no Android o app continua monitorando em segundo plano e o alerta toca mesmo com a tela apagada.</p></details>
+    <details><summary>Quais plataformas são suportadas?</summary><p>Android, pelo arquivo APK, e Windows, nas versões instalável e portátil (x32 e x64).</p></details>
+    <details><summary>O app tem acesso à minha carteira ou aos meus fundos?</summary><p>Não. Ele só lê a cotação pública das moedas. Não pede chave, senha, seed ou acesso a carteira.</p></details>
+    <details><summary>O que são os links de afiliado nas ofertas?</summary><p>O app exibe ofertas do Mercado Livre com links de afiliado. Se você comprar por eles, o app recebe uma comissão da loja, sem nenhum custo extra para você. É o que mantém o projeto gratuito.</p></details>
+    <details><summary>Onde baixo a versão mais recente?</summary><p>Sempre na página de <a href="https://github.com/Jbispo22/real-crypto-alerts/releases/latest">releases do GitHub</a>.</p></details>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Real Crypto Alert</strong> — © 2026 Jonathas Bispo. Todos os direitos reservados.</p>
+    <p>Software proprietário, distribuído gratuitamente para uso pessoal e não comercial.</p>
+    <p><a href="https://github.com/Jbispo22/real-crypto-alerts">Código e releases no GitHub</a> · <a href="https://github.com/Jbispo22/real-crypto-alerts/blob/main/LICENSE">Licença</a></p>
+  </div>
+</footer>
+</body>
+</html>
