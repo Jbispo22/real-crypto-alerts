@@ -38,9 +38,9 @@ const SOUND_URLS = {
 }
 
 // ==========================================
-// 🔗 URL DO SEU GITHUB GIST
+// 🔗 URL DA LISTA DE OFERTAS
 // ==========================================
-const GIST_ML_ADS_URL = 'https://gist.githubusercontent.com/Jbispo22/d2a2c4c19b3909f9837f7c95d4b7dadd/raw/16b3a3ebd69d42cd88fb8ad2a946d4d310d79162/gistfile1.txt'
+const ML_ADS_URL = 'https://raw.githubusercontent.com/Jbispo22/real-crypto-alerts/main/ads.json'
 
 const FALLBACK_ML_ADS = [
   { label: 'OFERTA ML', title: 'Confira as Melhores Ofertas', body: 'Descontos exclusivos e frete grátis!', url: 'https://meli.la/2FS7j6R' }
@@ -86,20 +86,20 @@ function App() {
       .catch(() => setLaunchAtLogin(false))
   }, [])
 
-  // CARREGA ANÚNCIOS DO GITHUB GIST
+  // CARREGA ANÚNCIOS DO ADS.JSON
   useEffect(() => {
     async function loadMlAds() {
       try {
-        const response = await fetch(GIST_ML_ADS_URL, { cache: 'no-store' })
+        const response = await fetch(ML_ADS_URL, { cache: 'no-store' })
         if (response.ok) {
           const data = await response.json()
           if (Array.isArray(data) && data.length > 0) {
             setMlAds(data)
-            console.log('✅ Anúncios carregados do Gist:', data.length, 'itens')
+            console.log('✅ Anúncios carregados do ads.json:', data.length, 'itens')
           }
         }
       } catch (error) {
-        console.warn('⚠️ Falha ao carregar anúncios do Gist, usando fallback.', error)
+        console.warn('⚠️ Falha ao carregar anúncios do ads.json, usando fallback.', error)
       }
     }
     loadMlAds()
