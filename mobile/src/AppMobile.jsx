@@ -54,7 +54,7 @@ const COINS_AVAILABLE = [
   { symbol: 'SHIB', name: 'Shiba Inu', coingeckoId: 'shiba-inu' },
 ]
 
-const ADS_JSON_URL = 'https://raw.githubusercontent.com/Jbispo22/real-crypto-alert/main/ads.json'
+const ADS_JSON_URL = 'https://raw.githubusercontent.com/Jbispo22/real-crypto-alerts/main/ads.json'
 const FALLBACK_ML_ADS = [
   { label: 'OFERTA ML', title: 'Confira as Melhores Ofertas', body: 'Descontos exclusivos!', url: 'https://meli.la/2FS7j6R' }
 ]
